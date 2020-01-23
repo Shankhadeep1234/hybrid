@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <style>
+    [ng-cloak] {
+      display: none;
+    }
+  </style>
+  <title>Hybrid • TodoMVC</title>
+</head>
+
+<body ng-app="todomvc">
+  <!--React entry point-->
+  <div id="root"></div>
+  <ng-view></ng-view>
+
+  <script type="text/ng-template" id="todomvc-index.html">
+        <section class="todoapp">
+          <header class="header">
+            <h1>Hi</h1>
+            <form class="todo-form" ng-submit="addTodo()">
+              <input class="new-todo" placeholder="What needs to be done?" ng-model="newTodo" ng-disabled="saving" autofocus>
+            </form>
+          </header>
+          <section class="main" ng-show="todos.length" ng-cloak>
+            <input id="toggle-all" class="toggle-all" type="checkbox" ng-model="allChecked" ng-click="markAll(allChecked)">
+            <label for="toggle-all">Mark all as complete</label>
+            <ul class="todo-list">
+              <li ng-repeat="todo in todos | filter:statusFilter track by $index" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+                <div class="view">
+                  <input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="toggleCompleted(todo)">
+                  <label ng-dblclick="editTodo(todo)">
+                    <react-todo todo="todo.title"></react-todo>    <!-- This is React -->
+                  </label>
+                  <button class="destroy" ng-click="removeTodo(todo)"></button>
+                </div>
+                <form ng-submit="saveEdits(todo, 'submit')">
+                  <input class="edit" ng-trim="false" ng-model="todo.title" todo-escape="revertEdits(todo)" ng-blur="saveEdits(todo, 'blur')" todo-focus="todo == editedTodo">
+                </form>
+                
+              </li>
+            </ul>
+          </section>
+          <footer class="footer" ng-show="todos.length" ng-cloak>
+            <span class="todo-count"><strong>{{remainingCount}}</strong>
+              <ng-pluralize count="remainingCount" when="{ one: 'item left', other: 'items left' }"></ng-pluralize>
+            </span>
+            <ul class="filters">
+              <li>
+                <a ng-class="{selected: status == ''} " href="#/">All</a>
+              </li>
+              <li>
+                <a ng-class="{selected: status == 'active'}" href="#/active">Active</a>
+              </li>
+              <li>
+                <a ng-class="{selected: status == 'completed'}" href="#/completed">Completed</a>
+              </li>
+            </ul>
+            <button class="clear-completed" ng-click="clearCompletedTodos()" ng-show="completedCount">Clear completed</button>
+          </footer>
+        </section>
+        <footer class="info">
+          <p>Double-click to edit a todo</p>
+          <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+        </footer>
+      </script>
+
+</body>
+
+</html>
